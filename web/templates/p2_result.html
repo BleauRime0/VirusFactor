@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virulence Factors of Pathogen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Virulence Factors of {{ pathogen_name }}</h1>
+        <div>
+            <label>Select Columns to Display:</label><br>
+            <div>
+                <input type="checkbox" id="GeneName" checked> Gene Name<br>
+                <input type="checkbox" id="ncbiGeneID" checked> NCBI Gene ID<br>
+                <input type="checkbox" id="ncbiNucleotideGI" checked> NCBI Nucleotide GI<br>
+                <input type="checkbox" id="LocusTag" checked> Locus Tag<br>
+                <input type="checkbox" id="GenbankAccession" checked> Genbank Accession<br>
+                <input type="checkbox" id="PMID" checked> PMID<br>
+                <input type="checkbox" id="PathogenID"> Pathogen ID<br>
+                <input type="checkbox" id="PathogenName"> Pathogen Name<br>
+                <input type="checkbox" id="SequenceStrain"> Sequence Strain<br>
+                <input type="checkbox" id="GeneID"> Gene ID<br>
+            </div>
+            <button onclick="filterColumns()">Filter</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="GeneName">Gene Name</th>
+                    <th class="ncbiGeneID">NCBI Gene ID</th>
+                    <th class="ncbiNucleotideGI">NCBI Nucleotide GI</th>
+                    <th class="LocusTag">Locus Tag</th>
+                    <th class="GenbankAccession">Genbank Accession</th>
+                    <th class="PMID">PMID</th>
+                    <th class="PathogenID hidden">Pathogen ID</th>
+                    <th class="PathogenName hidden">Pathogen Name</th>
+                    <th class="SequenceStrain hidden">Sequence Strain</th>
+                    <th class="GeneID hidden">Gene ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pathogen, gene in results %}
+                <tr>
+                    <td class="GeneName">{{ gene.GeneName if gene.GeneName else '' }}</td>
+                    <td class="ncbiGeneID">{{ gene.ncbiGeneID if gene.ncbiGeneID else '' }}</td>
+                    <td class="ncbiNucleotideGI">{{ gene.ncbiNucleotideGI if gene.ncbiNucleotideGI else '' }}</td>
+                    <td class="LocusTag">{{ gene.LocusTag if gene.LocusTag else '' }}</td>
+                    <td class="GenbankAccession">{{ gene.GenbankAccession if gene.GenbankAccession else '' }}</td>
+                    <td class="PMID">{{ gene.PMID if gene.PMID else '' }}</td>
+                    <td class="PathogenID hidden">{{ pathogen.Pathogen_id if pathogen.Pathogen_id else '' }}</td>
+                    <td class="PathogenName hidden">{{ pathogen.PathogenName if pathogen.PathogenName else '' }}</td>
+                    <td class="SequenceStrain hidden">{{ pathogen.SequenceStrain if pathogen.SequenceStrain else '' }}</td>
+                    <td class="GeneID hidden">{{ gene.Gene_id if gene.Gene_id else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function filterColumns() {
+            // 获取所有复选框的状态
+            const checkboxes = {
+                GeneName: document.getElementById('GeneName').checked,
+                ncbiGeneID: document.getElementById('ncbiGeneID').checked,
+                ncbiNucleotideGI: document.getElementById('ncbiNucleotideGI').checked,
+                LocusTag: document.getElementById('LocusTag').checked,
+                GenbankAccession: document.getElementById('GenbankAccession').checked,
+                PMID: document.getElementById('PMID').checked,
+                PathogenID: document.getElementById('PathogenID').checked,
+                PathogenName: document.getElementById('PathogenName').checked,
+                SequenceStrain: document.getElementById('SequenceStrain').checked,
+                GeneID: document.getElementById('GeneID').checked,
+            };
+
+            // 根据复选框状态显示或隐藏列
+            Object.keys(checkboxes).forEach(key => {
+                document.querySelectorAll(`.${key}`).forEach(cell => {
+                    if (checkboxes[key]) {
+                        cell.classList.remove('hidden');
+                    } else {
+                        cell.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        // 初始默认显示
+        document.addEventListener('DOMContentLoaded', () => {
+            filterColumns();
+        });
+    </script>
+</body>
+</html>
